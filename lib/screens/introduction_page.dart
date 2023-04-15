@@ -48,15 +48,13 @@ class IntroductionPage extends StatelessWidget {
         ),
         PageViewModel(
           title: "Learn as you go",
-          body:
-              "Download the Stockpile app and master the market with our mini-lesson.",
+          body: "",
           // image: _buildImage('img2.jpg'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Kids and teens",
-          body:
-              "Kids and teens can track their stocks 24/7 and place trades that you approve.",
+          body: ".",
           // image: _buildImage('img3.jpg'),
           decoration: pageDecoration,
         ),
