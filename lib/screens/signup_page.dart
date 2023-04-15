@@ -1,18 +1,22 @@
-import 'package:anonymous/colorTheme.dart';
-import 'package:anonymous/screens/signup_page.dart';
-import 'package:anonymous/widgets/text_field_widget.dart';
+import 'package:anonymous/resourses/auth_methods.dart';
+import 'package:anonymous/screens/login_page.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+import '../colorTheme.dart';
+import '../widgets/text_field_widget.dart';
+
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,13 +31,44 @@ class _LoginPageState extends State<LoginPage> {
                 child: Container(),
                 flex: 1,
               ),
+              const SizedBox(
+                height: 64,
+              ),
 
+              Stack(
+                children: [
+                  const CircleAvatar(
+                    radius: 64,
+                    backgroundImage: NetworkImage(
+                        "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?cs=srgb&dl=pexels-pixabay-220453.jpg&fm=jpg"),
+                  ),
+                  Positioned(
+                      bottom: -10,
+                      left: 80,
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.add_a_photo),
+                      ))
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
               //image
               TextFieldWidget(
-                  textEditingController: _emailController,
+                  textEditingController: _usernameController,
                   textInputType: TextInputType.emailAddress,
-                  hintText: 'Enter your Email'),
-              SizedBox(
+                  hintText: 'Enter your Username'),
+              const SizedBox(
+                height: 20,
+              ),
+              TextFieldWidget(
+                textEditingController: _emailController,
+                textInputType: TextInputType.text,
+                hintText: 'Enter your Email',
+              ),
+
+              const SizedBox(
                 height: 20,
               ),
               TextFieldWidget(
@@ -42,12 +77,16 @@ class _LoginPageState extends State<LoginPage> {
                 hintText: 'Enter your Password',
                 isPass: true,
               ),
-
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
 
               InkWell(
+                onTap: () => AuthMethods().signUpUser(
+                  username: _usernameController.text,
+                  email: _emailController.text,
+                  password: _passController.text,
+                ),
                 child: Container(
                   width: double.infinity,
                   alignment: Alignment.center,
@@ -61,14 +100,14 @@ class _LoginPageState extends State<LoginPage> {
                     color: blueColor,
                   ),
                   child: const Text(
-                    "Login In",
+                    "Sign Up",
                     style: TextStyle(
                       color: Colors.white,
                     ),
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
 
@@ -81,9 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      SignUpPage();
-                    },
+                    onTap: () {},
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                         vertical: 8,

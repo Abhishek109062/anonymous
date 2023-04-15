@@ -1,11 +1,15 @@
 import 'package:anonymous/screens/introduction_page.dart';
 import 'package:anonymous/screens/login_page.dart';
-import 'package:anonymous/screens/menu_widget.dart';
+import 'package:anonymous/screens/signup_page.dart';
+import 'package:anonymous/widgets/menu_widget.dart';
 import 'package:anonymous/screens/splash_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -21,10 +25,11 @@ class MyApp extends StatelessWidget {
         fontFamily: "Times New Roman",
         primarySwatch: Colors.purple,
       ),
-      initialRoute: '/',
+      initialRoute: 'SignUp',
       routes: {
         '/': (context) => MyHomePage(),
         'login': (context) => LoginPage(),
+        'SignUp': (context) => SignUpPage(),
       },
     );
   }
