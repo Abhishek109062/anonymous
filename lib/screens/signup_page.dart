@@ -1,6 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:anonymous/resourses/auth_methods.dart';
 import 'package:anonymous/screens/login_page.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../colorTheme.dart';
 import '../widgets/text_field_widget.dart';
@@ -16,10 +19,42 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
+  Uint8List? _image;
+
+  bool _isloading = false;
+
+  ImagePicker picker = ImagePicker();
+
+  Future selectImage(ImageSource source) async {
+    XFile? image = await picker.pickImage(source: source);
+    Uint8List img = await image!.readAsBytes();
+
+    setState(() {
+      _image = img;
+    });
+  }
+
+  void signUpUser() async {
+    setState(() {
+      _isloading = true;
+    });
+    String res = await AuthMethods().signUpUser(
+      username: _usernameController.text,
+      email: _emailController.text,
+      password: _passController.text,
+      image: _image!,
+    );
+
+    setState(() {
+      _isloading = false;
+    });
+    print(res);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.all(32),
@@ -37,16 +72,23 @@ class _SignUpPageState extends State<SignUpPage> {
 
               Stack(
                 children: [
-                  const CircleAvatar(
-                    radius: 64,
-                    backgroundImage: NetworkImage(
-                        "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?cs=srgb&dl=pexels-pixabay-220453.jpg&fm=jpg"),
-                  ),
+                  _image == null
+                      ? const CircleAvatar(
+                          radius: 64,
+                          backgroundImage: NetworkImage(
+                              "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o="),
+                        )
+                      : CircleAvatar(
+                          radius: 64,
+                          backgroundImage: MemoryImage(_image!),
+                        ),
                   Positioned(
                       bottom: -10,
                       left: 80,
                       child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          selectImage(ImageSource.gallery);
+                        },
                         icon: const Icon(Icons.add_a_photo),
                       ))
                 ],
@@ -82,11 +124,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
 
               InkWell(
-                onTap: () => AuthMethods().signUpUser(
-                  username: _usernameController.text,
-                  email: _emailController.text,
-                  password: _passController.text,
-                ),
+                onTap: signUpUser,
                 child: Container(
                   width: double.infinity,
                   alignment: Alignment.center,
@@ -99,12 +137,18 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                     color: blueColor,
                   ),
-                  child: const Text(
-                    "Sign Up",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
+                  child: _isloading
+                      ? Container(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        )
+                      : Text(
+                          "Sign Up",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
                 ),
               ),
               const SizedBox(
