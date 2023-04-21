@@ -139,11 +139,11 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   child: _isloading
                       ? Container(
-                          child: CircularProgressIndicator(
+                          child: const CircularProgressIndicator(
                             color: Colors.white,
                           ),
                         )
-                      : Text(
+                      : const Text(
                           "Sign Up",
                           style: TextStyle(
                             color: Colors.white,
@@ -164,25 +164,34 @@ class _SignUpPageState extends State<SignUpPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 8,
-                      ),
-                      child: const Text(
-                        "Have an account?",
-                        style: TextStyle(
-                          color: Colors.black38,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => LoginPage()),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 8,
+                          ),
+                          child: const Text(
+                            "Have an account? ",
+                            style: TextStyle(
+                              color: Colors.black38,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8,
-                    ),
-                    child: const Text(
-                      "Sign In",
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 8,
+                          ),
+                          child: const Text(
+                            "Sign In",
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

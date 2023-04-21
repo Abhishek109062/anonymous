@@ -35,7 +35,13 @@ class IntroductionPage extends StatelessWidget {
             'Let\'s go right away!',
             style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              'SignUp',
+              ModalRoute.withName('SignUp'),
+            );
+          },
         ),
       ),
       pages: [

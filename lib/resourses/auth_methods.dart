@@ -19,7 +19,7 @@ class AuthMethods {
   }) async {
     String response = "An error has occured";
     try {
-      if (username.isNotEmpty || email.isNotEmpty || password.isNotEmpty) {
+      if (username.isNotEmpty && email.isNotEmpty && password.isNotEmpty) {
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
 
@@ -39,6 +39,28 @@ class AuthMethods {
     } on FirebaseAuthException catch (error) {
       if (error.code == 'invalid-email') {
         response = "Please Enter a valid Email";
+      }
+    } catch (error) {
+      response = error.toString();
+    }
+
+    return response;
+  }
+
+  //LoginIn a user
+  Future<String> loginInUser({
+    required String email,
+    required String password,
+  }) async {
+    String response = "An error has occured";
+
+    try {
+      if (email.isNotEmpty && password.isNotEmpty) {
+        await _auth.signInWithEmailAndPassword(
+            email: email, password: password);
+        response = "success";
+      } else {
+        response = "Enter valid Input";
       }
     } catch (error) {
       response = error.toString();
