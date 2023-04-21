@@ -1,4 +1,5 @@
 import 'package:anonymous/colorTheme.dart';
+import 'package:anonymous/resourses/auth_methods.dart';
 import 'package:anonymous/screens/signup_page.dart';
 import 'package:anonymous/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,23 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
+  bool _isLoading = false;
+
+  void logInUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    String response = await AuthMethods().loginInUser(
+      email: _emailController.text,
+      password: _passController.text,
+    );
+    print("Reponse received from Firebase " + response);
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
                   textEditingController: _emailController,
                   textInputType: TextInputType.emailAddress,
                   hintText: 'Enter your Email'),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               TextFieldWidget(
@@ -43,11 +61,12 @@ class _LoginPageState extends State<LoginPage> {
                 isPass: true,
               ),
 
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
 
               InkWell(
+                onTap: logInUser,
                 child: Container(
                   width: double.infinity,
                   alignment: Alignment.center,
@@ -60,15 +79,21 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     color: blueColor,
                   ),
-                  child: const Text(
-                    "Login In",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
+                  child: _isLoading
+                      ? Container(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Text(
+                          "Login In",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
 
@@ -82,26 +107,33 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      SignUpPage();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => SignUpPage()),
+                      );
                     },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 8,
-                      ),
-                      child: const Text(
-                        "Have an account?",
-                        style: TextStyle(
-                          color: Colors.black38,
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 8,
+                          ),
+                          child: const Text(
+                            " Don't have an account? ",
+                            style: TextStyle(
+                              color: Colors.black38,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8,
-                    ),
-                    child: const Text(
-                      "Sign In",
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 8,
+                          ),
+                          child: const Text(
+                            "Sign Up",
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

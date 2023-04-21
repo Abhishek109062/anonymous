@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:anonymous/colorTheme.dart';
 import 'package:anonymous/screens/introduction_page.dart';
 import 'package:anonymous/screens/login_page.dart';
 import 'package:anonymous/screens/signup_page.dart';
@@ -23,12 +25,12 @@ class MyApp extends StatelessWidget {
       title: 'Anonymous',
       theme: ThemeData(
         fontFamily: "Times New Roman",
-        primarySwatch: Colors.purple,
+        primaryColor: primaryColor,
       ),
-      initialRoute: 'SignUp',
+      initialRoute: '/',
       routes: {
         '/': (context) => MyHomePage(),
-        'login': (context) => LoginPage(),
+        'logIn': (context) => LoginPage(),
         'SignUp': (context) => SignUpPage(),
       },
     );
@@ -43,8 +45,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  loadSignIn() async {
+    Timer(Duration(seconds: 2), () {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => IntroductionPage()));
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadSignIn();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return IntroductionPage();
+    return SplashPage();
   }
 }
